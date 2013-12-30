@@ -75,15 +75,11 @@ class Queue(object):
         """Returns whether the current queue is empty."""
         return self.count == 0
 
-    def safe_fetch_job(self, job_id):
+    def fetch_job(self, job_id):
         try:
-            job = Job.safe_fetch(job_id, connection=self.connection)
+            return Job.fetch(job_id, connection=self.connection)
         except NoSuchJobError:
             self.remove(job_id)
-            return None
-        except UnpickleError:
-            return None
-        return job
 
     def get_job_ids(self, offset=0, length=-1):
         """Returns a slice of job IDs in the queue."""
@@ -98,7 +94,7 @@ class Queue(object):
     def get_jobs(self, offset=0, length=-1):
         """Returns a slice of jobs in the queue."""
         job_ids = self.get_job_ids(offset, length)
-        return compact([self.safe_fetch_job(job_id) for job_id in job_ids])
+        return compact([self.fetch_job(job_id) for job_id in job_ids])
 
     @property
     def job_ids(self):

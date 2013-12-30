@@ -1,6 +1,8 @@
 ### 0.4.0
 (not released yet)
 
+- Job data is unpickled lazily. This fixes issue #294.
+
 - Job dependencies!  Thanks, Selwin.
 
 - `Queue.all()` and `rqinfo` now report empty queues, too.  Thanks, Rob!
